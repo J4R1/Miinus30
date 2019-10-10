@@ -56,7 +56,7 @@ const useUploadForm = () => {
       setMedia([]);
       setTimeout(() => {
         reloadAllMedia(setMedia, setMyMedia);
-        setLoading(false);
+        // setLoading(false);
         navigation.navigate('Home');
       }, 2000);
     }).catch((err) => {

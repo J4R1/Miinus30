@@ -20,7 +20,7 @@ export default class BarcodeScanner extends React.Component {
   state = {
     hasCameraPermission: null,
     scanned: false,
-    myText: 'My Original Text',
+    myText: ' ',
     // lastRefresh: Date(Date.now()).toString(),
     // refreshScreen: this.refreshScreen.bind(this),
   }
@@ -56,29 +56,33 @@ export default class BarcodeScanner extends React.Component {
     const {hasCameraPermission, scanned} = this.state;
 
     if (hasCameraPermission === null) {
-      return <Text>Requesting for camera permission</Text>;
+      return <Text style={{color: '#fff', fontSize: 20}}>Requesting for camera permission</Text>;
     }
     if (hasCameraPermission === false) {
-      return <Text>No access to camera</Text>;
+      return <Text style={{color: '#fff', fontSize: 20}}>No access to camera</Text>;
     }
     return (
       <View
         style={{
           flex: 1,
-          maxHeight: 120,
+          maxHeight: 200,
           // width: 400,
           // flexDirection: 'column',
           // flexDirection: 'row',
           justifyContent: 'flex-end',
+          overflow: 'hidden',
         }}>
-        <Text name="red" onPress = {this.updateText}>
-          {this.state.myText}
+        <Text selectable name="red" onPress = {this.updateText} style={{color: '#6bec1b', fontSize: 20}}
+        > Barcode: {this.state.myText}
         </Text>
 
         <Card style={{
-          maxHeight: 120,
-          backgroundColor: '#383838',
+          maxHeight: 170,
+          backgroundColor: '#000',
         }}>
+          {scanned && (
+            <Button title={'Tap to Scan Again'} onPress={() => this.setState({scanned: false})} />
+          )}
           <BarCodeScanner
             onBarCodeScanned={scanned ? undefined : this.handleBarCodeScanned}
             // captureQuality={Camera.constants.CaptureQuality["1080p"]}
@@ -90,9 +94,6 @@ export default class BarcodeScanner extends React.Component {
             }}
           />
         </Card>
-        {scanned && (
-          <Button title={'Tap to Scan Again'} onPress={() => this.setState({scanned: false})} />
-        )}
       </View>
     );
   }

@@ -15,7 +15,25 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
+    },
+	"androidNavigationBar": {
+     /*
+        Determines whether to show or hide the bottom navigation bar.
+        Specify `true` to show and `false` to hide. The Android design guidelines recommend hiding the status bar when the navigation bar is hidden.
+      */
+    "visible": true,
+    /*
+      Configure the navigation-bar icons to have a light or dark color.
+      Valid values: "light-content", "dark-content".
+    */
+    "barStyle": "light-content",
+
+    /*
+      Specifies the background color of the navigation bar.
+      Six-character hex color string, e.g., "#000000"
+    */
+    "backgroundColor": "#1c231f"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

@@ -1,169 +1,161 @@
-/* eslint-disable object-curly-spacing */
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-/* eslint-disable quotes */
-/* eslint-disable no-undef */
-/* eslint-disable prefer-const */
-/* eslint-disable arrow-parens */
-/* eslint-disable no-invalid-this */
-/* eslint-disable max-len */
-/* eslint(arrow-parens)*/
-import React, {useState, useEffect, Component} from 'react';
-import {StyleSheet, Image, View, ToolbarAndroid} from 'react-native';
-import {Form, Button, Text, Content, Card, Icon} from 'native-base';
-import FormTextInput from '../components/FormTextInput';
+import React from 'react';
 import PropTypes from 'prop-types';
-import useUploadForm from '../hooks/UploadHooks';
-import * as ImagePicker from 'expo-image-picker';
-import Constants from 'expo-constants';
-import * as Permissions from 'expo-permissions';
-import {Video} from 'expo-av';
-import BarcodeScanner from '../views/BarCode';
-import Testi2 from '../views/Testi2';
-import {BarCodeScanner} from 'expo-barcode-scanner';
+import {
+  ListItem as BaseListItem,
+  Button,
+  Left,
+  Thumbnail,
+  Body,
+  Right,
+  H2,
+  Text,
+  Card,
+  View,
+  CardItem,
+} from 'native-base';
+import mediaAPI from '../hooks/ApiHooks';
 
 const Global = (props) => {
-  const [file, setFile] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const {
-    inputs,
-    handleTitleChange,
-    handleDescriptionChange,
-    handleUpload,
-    handleTagChange,
-    resetForm,
-  } = useUploadForm();
+  const {navigation, singleMedia} = props;
+  const {getThumbnail, getTag} = mediaAPI();
+  const tn = getThumbnail(singleMedia.file_id);
+  const xx = getTag(singleMedia.file_id);
 
-  const getPermissionAsync = async () => {
-    if (Constants.platform.ios) {
-      const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (status !== 'granted') {
-        alert('Sorry, we need camera roll permissions to make this work!');
-      }
-    }
-  };
-
-  const pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-    });
-
-    console.log(result);
-
-    if (!result.cancelled) {
-      setFile(result);
-    }
-  };
-
-  useEffect(() => {
-    getPermissionAsync();
-  }, []);
-
+  console.log('thumbnails', tn);
   return (
-    <Content style={{
-      // flex: 1,
-    }
-    }>
-      <View style={styles.statusBar} />
-      <ToolbarAndroid // # text color
-        style={styles.toolbar}
-        title='Miinus30'
-        titleColor='#A8A8A8'/>
-
-      <View style={{
+    <BaseListItem thumbnail
+      style={{
+        backgroundColor: '#00262f',
+        padding: 0, //
+        border: 0, //
+        margin: 0, //
+        flex: 1, //
+      }}>
+      <Card style={{
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#035c6e', //  cardin sisältö
+        // padding: 0, //
+        // border: 0, //
+        // margin: 0, //
       }}>
-        <Card style={{
-          width: 160,
-          height: 160,
+        <CardItem
+          style={{
+            flex: 1,
+            alignSelf: 'stretch',
+            backgroundColor: '#035c6e', // cardin ylätaso
+          }}>
+          <H2
+            style={{
+              textAlign: 'left',
+              alignSelf: 'stretch',
+              fontSize: 20,
+              color: '#fff',
+              textShadowColor: '#000',
+              textShadowOffset: {width: -1, height: 1},
+              textShadowRadius: 2,
+            }}>{singleMedia.title}</H2>
+          <Right>
+            <H2
+              style={{
+                textAlign: 'right',
+                alignSelf: 'stretch',
+                fontSize: 15,
+                color: '#ec1b4b',
+                textShadowColor: '#000',
+                textShadowOffset: {width: -1, height: 1},
+                textShadowRadius: 2,
+              }}>#{singleMedia.file_id}</H2>
+          </Right>
+        </CardItem>
+        <CardItem style={{
+          backgroundColor: '#000',
         }}>
-          {file &&
-          <Image source={{uri: file.uri}} style={{width: 150, height: 150}} />
+          {(tn) && <Thumbnail square
+            style={{
+              flex: 1,
+              maxWidth: 300,
+              height: 300,
+            // borderWidth: 1,
+            // borderRadius: 30/2
+            }}
+            source={{uri: 'http://media.mw.metropolia.fi/wbma/uploads/' + tn.w640}} />
           }
-        </Card>
-      </View>
-      <Form>
-        <FormTextInput
-          value={inputs.title}
-          placeholder='title'
-          onChangeText={handleTitleChange}
-        />
-        <FormTextInput
-          value={inputs.description}
-          placeholder='description'
-          onChangeText={handleDescriptionChange}
-        />
-        <FormTextInput
-          value={inputs.tag}
-          placeholder='tag'
-          onChangeText={handleTagChange}
-        />
-        <View style={{ flexDirection: 'row',
-          marginTop: 5,
-          marginBottom: 5,
-        }}>
-          <Button iconLeft bordered style={{// SELECT Button
-            marginLeft: 5,
-            // styles.mb15
-          }}
-          onPress={pickImage}
-          >
-            <Icon active name='attach' />
-            <Text>{global.MyVar}</Text>
-          </Button>
-          <Button // UPLOAD Button
-            iconLeft
-            bordered
-            style={{marginLeft: 5}}
-            onPress={() => {
-              handleUpload(file);
-            }}
-          >
-            <Icon active name='add' />
-            <Text>UPLOAD</Text>
-          </Button>
-          <Button // RESET Button
-            iconLeft
-            bordered
-            style={{marginLeft: 5}}
-            onPress={() => {
-              inputs.title = '';
-              inputs.description = '';
-              setFile(null);
-            }}
-          >
-            <Icon active name='undo' />
-            <Text>RESET</Text>
-          </Button>
-        </View>
-      </Form>
-    </Content>
+        </CardItem>
 
+        <Body
+          style={{
+            padding: 5,
+          }}>
+          <Text numberOfLines={2}
+            style={{
+              color: '#fff',
+              fontSize: 15,
+            }}>{singleMedia.description}</Text>
+          <H2
+            style={{
+              color: '#ffff00',
+              fontSize: 10,
+            }}>{xx}</H2>
+        </Body>
+        <Button
+          style={{
+            // flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '75%',
+            backgroundColor: '#3f8994', // 2e3e4r 557b83 39aea9 27363b
+            // gradientBegin: '#000',
+            // gradientEnd: '#fff',
+            marginBottom: 2,
+            borderLeftWidth: 2,
+            borderBottomWidth: 2,
+            borderRightWidth: 2,
+            borderTopWidth: 2,
+            borderColor: '#212121',
+          }}
+          raised
+          onPress={
+            () => {
+              navigation.push('Single', {file: singleMedia});
+            }
+          }
+        >
+          <Text style={{
+            color: '#fff',
+            textShadowColor: '#000',
+            textShadowOffset: {width: -1, height: 1},
+            textShadowRadius: 3,
+            // gradientBegin: '#000',
+            // gradientEnd: '#fff',
+          }}>View</Text>
+        </Button>
+
+      </Card>
+    </BaseListItem>
   );
 };
-const styles = StyleSheet.create({
-  toolbar: {
-    backgroundColor: '#383838', // header
-    height: 56,
-    alignSelf: 'stretch',
-    textAlign: 'center',
-  },
-  statusBar: {
-    backgroundColor: '#282828', // top
-    height: Constants.statusBarHeight,
-  },
-  container: {
-    backgroundColor: '#EEE',
-  },
-  mb15: {
-    marginBottom: 20,
-  },
-});
+
 Global.propTypes = {
+  singleMedia: PropTypes.object,
   navigation: PropTypes.object,
 };
 
 export default Global;
-
+/*
+<Right>
+        <Button
+          onPress={
+            () => {
+              // console.log('klik');
+              navigation.push('Single', {file: singleMedia});
+            }
+          }
+        >
+          <Text>View</Text>
+        </Button>
+      </Right>
+*/

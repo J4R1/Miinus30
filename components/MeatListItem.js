@@ -13,11 +13,10 @@ import {
   Card,
   View,
   CardItem,
-  Icon,
 } from 'native-base';
 import mediaAPI from '../hooks/ApiHooks';
 
-const ListItem = (props) => {
+const MeatListItem = (props) => {
   const {navigation, singleMedia} = props;
   const {getThumbnail, getTag} = mediaAPI();
   // const file = navigation.state.params.file[0];
@@ -102,13 +101,27 @@ const ListItem = (props) => {
               fontSize: 10,
             }}>{xx}</H2>
         </Body>
-        <Button iconLeft bordered
+
+      </Card>}
+    </BaseListItem>
+  );
+};
+
+MeatListItem.propTypes = {
+  singleMedia: PropTypes.object,
+  navigation: PropTypes.object,
+};
+
+export default MeatListItem;
+/*
+
+        <Button
           style={{
             // flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-            width: '40%',
-            backgroundColor: '#00262f', // 2e3e4r 557b83 39aea9 27363b
+            width: '75%',
+            backgroundColor: '#3f8994', // 2e3e4r 557b83 39aea9 27363b
             // gradientBegin: '#000',
             // gradientEnd: '#fff',
             marginBottom: 2,
@@ -116,7 +129,7 @@ const ListItem = (props) => {
             borderBottomWidth: 2,
             borderRightWidth: 2,
             borderTopWidth: 2,
-            borderColor: '#39aea9',
+            borderColor: '#212121',
           }}
           raised
           onPress={
@@ -125,36 +138,13 @@ const ListItem = (props) => {
             }
           }
         >
-          <Icon active name='eye' style={{color: '#fff'}}/>
-          <Text style={{color: '#6bec1b',
+          <Text style={{
+            color: '#fff',
             textShadowColor: '#000',
             textShadowOffset: {width: -1, height: 1},
-            textShadowRadius: 2,
+            textShadowRadius: 3,
+            // gradientBegin: '#000',
+            // gradientEnd: '#fff',
           }}>View</Text>
         </Button>
-
-      </Card>}
-    </BaseListItem>
-  );
-};
-
-ListItem.propTypes = {
-  singleMedia: PropTypes.object,
-  navigation: PropTypes.object,
-};
-
-export default ListItem;
-/*
-<Right>
-        <Button
-          onPress={
-            () => {
-              // console.log('klik');
-              navigation.push('Single', {file: singleMedia});
-            }
-          }
-        >
-          <Text>View</Text>
-        </Button>
-      </Right>
-*/
+        */

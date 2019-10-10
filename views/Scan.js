@@ -1,175 +1,154 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-len */
 /* eslint-disable object-curly-spacing */
-// views/Upload.js
-
-import React, {useState, useEffect, Component} from 'react';
-import {StyleSheet, Image, View, ToolbarAndroid} from 'react-native';
-import {Form, Button, Text, Content, Card, Icon} from 'native-base';
-import FormTextInput from '../components/FormTextInput';
-import PropTypes from 'prop-types';
-import useUploadForm from '../hooks/UploadHooks';
-import * as ImagePicker from 'expo-image-picker';
+import React, { Component } from 'react';
+import {
+  Container,
+  Header,
+  Title,
+  Button,
+  Icon,
+  Tabs,
+  Tab,
+  Right,
+  Left,
+  Body,
+  View,
+  Text,
+  Item,
+  Input,
+  Content,
+} from 'native-base';
 import Constants from 'expo-constants';
-import * as Permissions from 'expo-permissions';
-import {Video} from 'expo-av';
-import BarcodeScanner from '../views/BarCode';
-import Testi2 from '../views/Testi2';
-import {BarCodeScanner} from 'expo-barcode-scanner';
+import PropTypes from 'prop-types';
+import MeatList from '../components/MeatList';
+import VeggieList from '../components/VeggieList';
+import BakedList from '../components/BakedList';
+import Meat from '../views/Meat';
+import Veggie from '../views/Veggie';
+import Baked from '../views/Baked';
+import Testi from '../views/Testi';
+import Home from '../views/Home';
 
+console.disableYellowBox = true;
 
-const Scan = (props) => {
-  const [file, setFile] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const {
-    inputs,
-    handleTitleChange,
-    handleDescriptionChange,
-    handleUpload,
-    handleTagChange,
-    resetForm,
-  } = useUploadForm();
-
-  const getPermissionAsync = async () => {
-    if (Constants.platform.ios) {
-      const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (status !== 'granted') {
-        alert('Sorry, we need camera roll permissions to make this work!');
-      }
-    }
-  };
-
-  const pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-    });
-
-    console.log(result);
-
-    if (!result.cancelled) {
-      setFile(result);
-    }
-  };
-
-  useEffect(() => {
-    getPermissionAsync();
-  }, []);
-
-  return (
-    <Content style={{
-      // flex: 1,
-    }
-    }>
-      <View style={styles.statusBar} />
-      <ToolbarAndroid // # text color
-        style={styles.toolbar}
-        title='Miinus30'
-        titleColor='#A8A8A8'/>
-
-      <View style={{
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-        <Card style={{
-          width: 160,
-          height: 160,
+class Search extends Component {
+  render() {
+    return (
+      <Container style={{
+        backgroundColor: '#00262f',
+      }} >
+        <View style={{
+          backgroundColor: '#00262f', // top
+          height: Constants.statusBarHeight,
+        }} />
+        <Header // # text color
+          style={{
+            backgroundColor: '#044c58', // header Color='#39aea9' 27363b 🛒🟨 🟩 🟥 🟧 ♻️ ⚔️💎💶
+            // height: 60,
+            paddingBottom: 3,
+            maringBottom: 3,
+            borderBottomColor: '#3f8994',
+            borderBottomWidth: 1,
+          }}>
+          <Left style={{maxWidth: '10%'}}>
+            <Icon
+              style={{
+                color: '#ec1b4b',
+                textShadowColor: '#000',
+                textShadowOffset: {width: -2, height: 2},
+                textShadowRadius: 4,
+              }}
+              name= 'pricetags'
+              size={30}
+            />
+          </Left>
+          <Body style={{flexDirection: 'row'}}>
+            <Text
+              style={{
+              // flex: 1,
+                fontSize: 34,
+                color: '#fff',
+                alignSelf: 'stretch',
+                textAlign: 'left',
+                textShadowColor: '#000',
+                textShadowOffset: {width: -2, height: 2},
+                textShadowRadius: 4,
+                marginRight: 0,
+                paddingRight: 0,
+                borderRightWidth: 0,
+              }}
+            >    Miinus</Text>
+            <Text
+              style={{
+              // flex: 1,
+                fontSize: 34,
+                color: '#ec1b4b',
+                alignSelf: 'stretch',
+                textAlign: 'left',
+                textShadowColor: '#000',
+                textShadowOffset: {width: -2, height: 2},
+                textShadowRadius: 4,
+                marginLeft: 0,
+                paddingLeft: 0,
+                borderLeftWidth: 0,
+              }}
+            >-30</Text></Body>
+          <Right>
+            <Button transparent
+              onPress={() => alert('Search items by typing keywords to the search field, and press 🔍\n\nSelect different Category by \nclicking the different Tab options\nYou can also swipe to switch tabs')}>
+              <Icon name="information-circle-outline" size={30} style={{color: '#fff'}}/>
+            </Button></Right>
+        </Header>
+        <Header searchBar rounded style={{
+          backgroundColor: '#044c58',
+          paddingBottom: 3,
+          maringBottom: 3,
+          borderBottomColor: '#3f8994',
+          borderBottomWidth: 1,
         }}>
-          {file &&
-          <Image source={{uri: file.uri}} style={{width: 150, height: 150}} />
-          }
-        </Card>
-      </View>
-      <Form>
-        <FormTextInput
-          value={inputs.title}
-          placeholder='title'
-          onChangeText={handleTitleChange}
-        />
-        <FormTextInput
-          value={inputs.description}
-          placeholder='description'
-          onChangeText={handleDescriptionChange}
-        />
-        <FormTextInput
-          value={inputs.tag}
-          placeholder='tag'
-          onChangeText={handleTagChange}
-        />
-        <View style={{ flexDirection: 'row',
-          marginTop: 5,
-          marginBottom: 5,
-        }}>
-          <Button iconLeft bordered style={{// SELECT Button
-            marginLeft: 5,
-            // styles.mb15
-          }}
-          onPress={pickImage}
-          >
-            <Icon active name='attach' />
-            <Text>{global.MyVar}</Text>
-          </Button>
-          <BarCodeScanner style={{flex: 1}}
-            onBarcodeRead={({data, type}) => {
-              // handle your scanned barcodes here!
-              // as an example, we show an alert:
-              Alert.alert(`Barcode ‘${data}’ of type ‘${type}’ was scanned.`);
-            }}
-          />
-          <Button // UPLOAD Button
-            iconLeft
-            bordered
-            style={{marginLeft: 5}}
-            onPress={() => {
-              handleUpload(file);
-            }}
-          >
-            <Icon active name='add' />
-            <Text>UPLOAD</Text>
-          </Button>
-          <Button // RESET Button
-            iconLeft
-            bordered
-            style={{marginLeft: 5}}
-            onPress={() => {
-              inputs.title = '';
-              inputs.description = '';
-              setFile(null);
-            }}
-          >
-            <Icon active name='undo' />
-            <Text>RESET</Text>
-          </Button>
-        </View>
-      </Form>
+          <Item style={{minWidth: '55%'}}>
+            <Icon active name="search" />
+            <Input placeholder="Search" />
+          </Item>
 
-    </Content>
+          <Right style={{alignSelf: 'flex-end'}}>
+            <Button bordered rounded style={{borderColor: '#ffff00'}}
+              onPress={() => alert('Search function is under maintenance')}>
+              <Icon name="search" style={{color: '#ffff00'}}/>
+            </Button>
+          </Right>
+        </Header>
 
-  );
-};
-const styles = StyleSheet.create({
-  toolbar: {
-    backgroundColor: '#383838', // header
-    height: 56,
-    alignSelf: 'stretch',
-    textAlign: 'center',
-  },
-  statusBar: {
-    backgroundColor: '#282828', // top
-    height: Constants.statusBarHeight,
-  },
-  container: {
-    backgroundColor: '#EEE',
-  },
-  mb15: {
-    marginBottom: 20,
-  },
-});
-Scan.propTypes = {
-  navigation: PropTypes.object,
-};
+        <Tabs tabBarUnderlineStyle={{borderBottomWidth: 2}}
+        >
+          <Tab heading="🥩 Meats 🍗"
+            tabStyle={{backgroundColor: '#1c231f'}}
+            textStyle={{color: '#557b83'}}
+            activeTabStyle={{backgroundColor: '#27363b'}}
+            activeTextStyle={{color: '#00cdcd', fontWeight: 'normal'}}>
+            <MeatList/>
+          </Tab>
+          <Tab heading="🥑 Veggies 🥕"
+            tabStyle={{backgroundColor: '#1c231f'}}
+            textStyle={{color: '#557b83'}}
+            activeTabStyle={{backgroundColor: '#27363b'}}
+            activeTextStyle={{color: '#00cdcd', fontWeight: 'normal'}}>
+            <VeggieList/>
+          </Tab>
+          <Tab heading="🍞 Baked 🥨"
+            tabStyle={{backgroundColor: '#1c231f'}}
+            textStyle={{color: '#557b83'}}
+            activeTabStyle={{backgroundColor: '#27363b'}}
+            activeTextStyle={{color: '#00cdcd', fontWeight: 'normal'}}>
+            <BakedList/>
+          </Tab>
+        </Tabs>
+      </Container>
+    );
+  }
+}
 
-export default Scan;
-
+export default Search;

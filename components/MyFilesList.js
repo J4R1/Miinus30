@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import PropTypes from 'prop-types';
 import {List as BaseList} from 'native-base';
@@ -11,10 +12,10 @@ const MyFilesList = (props) => {
   console.log(loading);
   console.log('media', myMedia);
   return (
-    <BaseList
+    <BaseList style={{backgroundColor: '#00262f', margin: 0, padding: 0, flex: 1}}
       dataArray={myMedia}
       renderRow={(item) =>
-        <MyFilesListItem navigation={navigation} singleMedia={item} />}
+        <MyFilesListItem navigation={navigation} singleMedia={item} style={{flex: 1, margin: 0, padding: 0}}/>}
       keyExtractor={(item, index) => index.toString()}
     />
   );

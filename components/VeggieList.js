@@ -2,10 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {List as BaseList} from 'native-base';
-import ListItem from './ListItem';
+import VeggieListItem from './VeggieListItem';
 import mediaAPI from '../hooks/ApiHooks';
 
-const List = (props) => {
+const VeggieList = (props) => {
   const {navigation} = props;
   // const {getAllMedia} = mediaAPI();
   // const [media, loading] = getAllMedia();
@@ -20,16 +20,19 @@ const List = (props) => {
   const [media, loading] = getTagItems();
   return (
     <BaseList
+      style={{
+        backgroundColor: '#00262f',
+      }}
       dataArray={media}
       renderRow={(item) =>
-        <ListItem navigation={navigation} singleMedia={item} />}
+        <VeggieListItem navigation={navigation} singleMedia={item} />}
       keyExtractor={(item, index) => index.toString()}
     />
   );
 };
 
-List.propTypes = {
+VeggieList.propTypes = {
   navigation: PropTypes.object,
 };
 
-export default List;
+export default VeggieList;

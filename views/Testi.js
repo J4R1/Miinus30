@@ -12,40 +12,79 @@
 /* eslint-disable max-len */
 /* eslint(arrow-parens)*/
 
-import React, {useState, useEffect, Component} from 'react';
-import {Form, Button, Text, Content} from 'native-base';
-import FormTextInput from '../components/FormTextInput';
-import PropTypes from 'prop-types';
-import useUploadForm from '../hooks/UploadHooks';
-import * as ImagePicker from 'expo-image-picker';
-import Constants from 'expo-constants';
-import * as Permissions from 'expo-permissions';
-import {Image, View, StyleSheet, Alert} from 'react-native';
-import BarcodeScanner from '../views/BarCode';
-import Upload from '../views/Upload';
+import React from 'react';
+import {StyleSheet, Text, View, Button, TextInput} from 'react-native';
+import {Clipboard} from 'react-native';
+import MeatList from '../components/MeatList';
+export default class Testi extends React.Component {
+  constructor(props) {
+    super(props);
 
+    this.state = {
+      text: '',
+      clipboardContent: null,
+    };
+  }
 
-class Testi extends React.Component {
+  readFromClipboard = async () => {
+    const clipboardContent = await Clipboard.getString();
+    this.setState({clipboardContent});
+  };
+
+  writeToClipboard = async () => {
+    await Clipboard.setString(this.state.text);
+    alert('Copied to Clipboard!');
+  };
+
   render() {
     return (
-      <View style={{
-        flex: 1,
-      }}>
-        <Upload>
-        </Upload>
-        <Text>
-        </Text>
-        <BarcodeScanner>
-        </BarcodeScanner>
+      <View style={styles.container}>
+        <Text style={styles.boldText}>Clipboard Contents: </Text>
+        <Text>{this.state.clipboardContent}</Text>
+        <Button
+          onPress={this.readFromClipboard}
+          title="Read from Clipboard"
+        />
+
+        <View style={styles.seperator} />
+
+        <TextInput
+          style={styles.textInput}
+          onChangeText={(text) => this.setState({text})}
+          value={this.state.text}
+          placeholder="Type here..."
+        />
+        <Button
+          onPress={this.writeToClipboard}
+          title="Write to Clipboard"
+        />
+        <MeatList/>
       </View>
     );
   }
 }
-// change barcode scanner aspect ratio in BarcodeScanner.js
 
-export default Testi;
-/*
-          aaa
-          {global.MyVar}
-          sss
-          {/* Global Variable */
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  boldText: {
+    fontWeight: '600',
+  },
+  seperator: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: 'gray',
+    width: '80%',
+    marginVertical: 40,
+  },
+  textInput: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    width: '80%',
+    paddingHorizontal: 10,
+  },
+});
