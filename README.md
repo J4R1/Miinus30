@@ -1,4 +1,2 @@
 # Miinus30
-![Screenshot](launch.jpg) ![Screenshot](sign_in.jpg)
-![Screenshot](register.jpg) ![Screenshot](home_page.jpg)
-![Screenshot](profile.jpg)
+ <img src="https://raw.githubusercontent.com/J4R1/Miinus30/master/launch.jpg" width="256">  <img src="https://raw.githubusercontent.com/J4R1/Miinus30/master/sign_in.jpg" width="256">  <img src="https://raw.githubusercontent.com/J4R1/Miinus30/master/register.jpg" width="256"><img src="https://raw.githubusercontent.com/J4R1/Miinus30/master/home_page.jpg" width="256"><img src="https://raw.githubusercontent.com/J4R1/Miinus30/master/profile.jpg" width="256">
